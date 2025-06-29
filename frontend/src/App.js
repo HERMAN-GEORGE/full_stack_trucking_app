@@ -4,7 +4,10 @@ import { MapContainer, TileLayer, Polyline, Marker, useMap } from 'react-leaflet
 import { Icon } from 'leaflet';
 import L from 'leaflet';
 import './App.css';
-import EldLogSheet from './components/EldLogSheet'; // <--- NEW IMPORT
+import EldLogSheet from './components/EldLogSheet';
+
+const API_BASE_URL = 'https://full-stack-trucking-app.onrender.com'; 
+
 
 const customIcon = new Icon({
   iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
