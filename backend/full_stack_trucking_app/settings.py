@@ -10,7 +10,7 @@ SECRET_KEY = 'django-insecure-@e^a5w_c7^s-27m3c!m#g1p73(9w&8v*k$l6x-p$#w+!^8)w+z
 
 DEBUG = True 
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'backend'] 
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'backend','full-stack-trucking-app.onrender.com'] 
 
 INSTALLED_APPS = [
     'django.contrib.admin',
