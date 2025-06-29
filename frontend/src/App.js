@@ -86,7 +86,7 @@ function App() {
 
   const fetchTrips = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/trips/`); // Removed dataToSend
+      const response = await axios.get(`${API_BASE_URL}/api/trips/`);
       setTrips(response.data);
     } catch (error) {
       console.error('Error fetching trips:', error);
@@ -95,7 +95,7 @@ function App() {
 
   const handleTripSelect = async (tripId) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/trips/${tripId}/`); // Removed dataToSend
+      const response = await axios.get(`${API_BASE_URL}/api/trips/${tripId}/`);
       setSelectedTrip(response.data);
       setMessage(`Viewing Trip ID: ${tripId}`);
     } catch (error) {
@@ -126,7 +126,7 @@ function App() {
   return (
     <div className="App">
       <main>
-        <h1>George herman moshi Trucking Trip Planner</h1>
+        <h1>George Herman Moshi - Trucking Trip Planner</h1>
         
         <div className="content-wrapper">
           <div className="left-panel">
