@@ -66,7 +66,8 @@ function App() {
     };
 
     try {
-      const response = await axios.post('/api/trips/', dataToSend);
+      const response = await axios.post(`${API_BASE_URL}/api/trips/`, dataToSend);
+     
       setMessage('Trip created successfully!');
       console.log('Trip created:', response.data);
 
@@ -96,7 +97,8 @@ function App() {
 
   const handleTripSelect = async (tripId) => {
     try {
-      const response = await axios.get(`/api/trips/${tripId}/`);
+          const response = await axios.post(`${API_BASE_URL}/api/trips/`, dataToSend);
+     
       setSelectedTrip(response.data);
       setMessage(`Viewing Trip ID: ${tripId}`);
     } catch (error) {
