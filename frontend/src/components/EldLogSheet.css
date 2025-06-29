@@ -1,0 +1,243 @@
+.eld-log-sheet-container {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #fdfdfd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    overflow-x: auto;
+    min-width: 700px;
+}
+
+.log-grid-header {
+    display: flex;
+    border-bottom: 2px solid #333;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+.status-column-header {
+    width: 60px;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+.timeline-header {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    height: 20px;
+    /* Ensure height for hour labels */
+}
+
+.hour-label {
+    position: absolute;
+    /* Position absolutely for precise placement */
+    top: 0;
+    transform: translateX(-50%);
+    /* Center label on the tick */
+    font-size: 0.85em;
+    color: #555;
+}
+
+/* Position each hour label explicitly */
+.hour-label:nth-child(1) {
+    left: 0%;
+}
+
+.hour-label:nth-child(2) {
+    left: calc(1 / 24 * 100%);
+}
+
+.hour-label:nth-child(3) {
+    left: calc(2 / 24 * 100%);
+}
+
+.hour-label:nth-child(4) {
+    left: calc(3 / 24 * 100%);
+}
+
+.hour-label:nth-child(5) {
+    left: calc(4 / 24 * 100%);
+}
+
+.hour-label:nth-child(6) {
+    left: calc(5 / 24 * 100%);
+}
+
+.hour-label:nth-child(7) {
+    left: calc(6 / 24 * 100%);
+}
+
+.hour-label:nth-child(8) {
+    left: calc(7 / 24 * 100%);
+}
+
+.hour-label:nth-child(9) {
+    left: calc(8 / 24 * 100%);
+}
+
+.hour-label:nth-child(10) {
+    left: calc(9 / 24 * 100%);
+}
+
+.hour-label:nth-child(11) {
+    left: calc(10 / 24 * 100%);
+}
+
+.hour-label:nth-child(12) {
+    left: calc(11 / 24 * 100%);
+}
+
+.hour-label:nth-child(13) {
+    left: calc(12 / 24 * 100%);
+}
+
+.hour-label:nth-child(14) {
+    left: calc(13 / 24 * 100%);
+}
+
+.hour-label:nth-child(15) {
+    left: calc(14 / 24 * 100%);
+}
+
+.hour-label:nth-child(16) {
+    left: calc(15 / 24 * 100%);
+}
+
+.hour-label:nth-child(17) {
+    left: calc(16 / 24 * 100%);
+}
+
+.hour-label:nth-child(18) {
+    left: calc(17 / 24 * 100%);
+}
+
+.hour-label:nth-child(19) {
+    left: calc(18 / 24 * 100%);
+}
+
+.hour-label:nth-child(20) {
+    left: calc(19 / 24 * 100%);
+}
+
+.hour-label:nth-child(21) {
+    left: calc(20 / 24 * 100%);
+}
+
+.hour-label:nth-child(22) {
+    left: calc(21 / 24 * 100%);
+}
+
+.hour-label:nth-child(23) {
+    left: calc(22 / 24 * 100%);
+}
+
+.hour-label:nth-child(24) {
+    left: calc(23 / 24 * 100%);
+}
+
+.hour-label:nth-child(25) {
+    left: 100%;
+}
+
+.hour-label::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+
+    height: 5px;
+    width: 1px;
+    background-color: #aaa;
+    transform: translateX(-50%);
+}
+
+.hour-label:first-child::before {
+    left: 0;
+    transform: translateX(0);
+
+}
+
+.hour-label:last-child::before {
+    left: auto;
+    right: 0;
+    transform: translateX(0);
+
+}
+
+
+.log-grid-body {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+}
+
+.log-row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px dashed #eee;
+    padding: 5px 0;
+}
+
+.log-row:last-child {
+    border-bottom: none;
+}
+
+.status-label {
+    width: 60px;
+    flex-shrink: 0;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+    padding-right: 5px;
+}
+
+.timeline-row {
+    flex: 1;
+    position: relative;
+    height: 25px;
+    background-color: #f0f0f0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.vertical-hour-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: #ddd;
+    z-index: 1;
+    height: 100%;
+
+}
+
+.log-bar {
+    position: absolute;
+    height: 100%;
+    border-radius: 3px;
+    opacity: 0.85;
+    cursor: help;
+    z-index: 2;
+}
+
+.log-bar.driving {
+    background-color: #28a745;
+}
+
+.log-bar.on-duty {
+    background-color: #ffc107;
+}
+
+.log-bar.off-duty {
+    background-color: #6c757d;
+}
+
+.log-bar.sleeper-berth {
+    background-color: #17a2b8;
+}
