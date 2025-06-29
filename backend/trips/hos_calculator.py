@@ -30,11 +30,8 @@ class HOSCalculator:
 
         self.last_activity_end_time = start_time
 
-        # Initialize the first daily log with an explicit OFF-DUTY status
-        # This ensures the log starts correctly from the given start_time
-        # and prevents IndexError when accessing last_activity_end_time
-        self.daily_logs.append([]) # Start the first day's log list
-        self._add_log_entry_internal( # Use internal helper to avoid infinite recursion
+        self.daily_logs.append([])
+        self._add_log_entry_internal(
             self.current_time, self.current_time, STATUS_OFF_DUTY, "Initial state before trip activities"
         )
 
@@ -56,16 +53,21 @@ class HOSCalculator:
         if start_dt >= end_dt:
             return
 
+        # Ensure there's always a current day's log list
+        if not self.daily_logs:
+            self.daily_logs.append([])
+        
         # Ensure continuity: add implicit OFF-DUTY if there's a gap from last activity
-        # This check is now safer because _add_log_entry_internal always ensures daily_logs[-1] is populated
-        if self.last_activity_end_time < start_dt:
+        # Only add if there's a previous activity to compare against AND the current day log is not empty
+        if self.daily_logs[-1] and self.last_activity_end_time < start_dt:
             gap_duration = (start_dt - self.last_activity_end_time).total_seconds() / 3600.0
             if gap_duration > 0.001:
                 self._add_log_entry_internal(self.last_activity_end_time, start_dt, STATUS_OFF_DUTY, f'Off-duty (implicit gap: {gap_duration:.2f} hrs)')
 
         # Check for new calendar day and create new log sheet if needed
         # This condition needs to be robust: check if daily_logs[-1] is not empty
-        if self.daily_logs and self.daily_logs[-1] and end_dt.date() > datetime.fromisoformat(self.daily_logs[-1][-1]['end_time']).date():
+        # and if the last entry's date is actually different from the current end_dt's date
+        if self.daily_logs[-1] and end_dt.date() > datetime.fromisoformat(self.daily_logs[-1][-1]['end_time']).date():
             
             last_entry_end_on_previous_day = datetime.fromisoformat(self.daily_logs[-1][-1]['end_time'])
             midnight_next_day = (last_entry_end_on_previous_day + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
@@ -83,7 +85,9 @@ class HOSCalculator:
 
         # Finally, add the actual log entry
         # Ensure there's always at least one day log list before appending
-        if not self.daily_logs or not self.daily_logs[-1]: # If current day log is empty
+        if not self.daily_logs: # This check should ideally not be hit after __init__ and previous logic
+            self.daily_logs.append([])
+        elif not self.daily_logs[-1]: # If current day log is empty (e.g. after a new day append)
              self.daily_logs.append([]) # Create a new sublist if it's somehow empty
 
         self._add_log_entry_internal(start_dt, end_dt, status, description)
@@ -106,7 +110,8 @@ class HOSCalculator:
             self.last_break_taken_time = None
             
             # Ensure a new log sheet starts after a full reset
-            if self.daily_logs and self.daily_logs[-1]: # If last day log has entries, start a new one
+            # Only append a new list if the current last one has entries
+            if self.daily_logs and self.daily_logs[-1]:
                 self.daily_logs.append([])
             self.last_activity_end_time = self.current_time
 
