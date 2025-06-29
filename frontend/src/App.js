@@ -6,8 +6,7 @@ import L from 'leaflet';
 import './App.css';
 import EldLogSheet from './components/EldLogSheet';
 
-const API_BASE_URL = 'https://full-stack-trucking-app.onrender.com'; 
-
+const API_BASE_URL = 'https://full-stack-trucking-app.onrender.com';
 
 const customIcon = new Icon({
   iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
@@ -67,7 +66,6 @@ function App() {
 
     try {
       const response = await axios.post(`${API_BASE_URL}/api/trips/`, dataToSend);
-     
       setMessage('Trip created successfully!');
       console.log('Trip created:', response.data);
 
@@ -88,7 +86,7 @@ function App() {
 
   const fetchTrips = async () => {
     try {
-      const response = await axios.get('/api/trips/');
+      const response = await axios.get(`${API_BASE_URL}/api/trips/`);
       setTrips(response.data);
     } catch (error) {
       console.error('Error fetching trips:', error);
@@ -97,8 +95,7 @@ function App() {
 
   const handleTripSelect = async (tripId) => {
     try {
-          const response = await axios.post(`${API_BASE_URL}/api/trips/`, dataToSend);
-     
+      const response = await axios.get(`${API_BASE_URL}/api/trips/${tripId}/`);
       setSelectedTrip(response.data);
       setMessage(`Viewing Trip ID: ${tripId}`);
     } catch (error) {
@@ -129,7 +126,7 @@ function App() {
   return (
     <div className="App">
       <main>
-        <h1>George Herman Moshi(TZ) Trucking Trip Planner</h1>
+        <h1>George herman moshi Trucking Trip Planner</h1>
 
         <div className="content-wrapper">
           <div className="left-panel">
@@ -217,7 +214,7 @@ function App() {
         </div>
 
         <h2>Existing Trips</h2>
-        {trips.length === 0 ? (
+        {!Array.isArray(trips) || trips.length === 0 ? (
           <p>No trips recorded yet. Submit a new trip to see it here!</p>
         ) : (
           <ul className="trip-list">
@@ -243,9 +240,9 @@ function App() {
             <h4>ELD Daily Logs</h4>
             {selectedTrip.daily_logs && selectedTrip.daily_logs.length > 0 ? (
               selectedTrip.daily_logs.map((dayLog, dayIndex) => (
-                <div key={dayIndex} className="daily-log-sheet">
+                <div key={dayIndex} className="daily-log-sheet-wrapper">
                   <h5>Day {dayIndex + 1} ({new Date(dayLog[0].start_time).toLocaleDateString()})</h5>
-                  <EldLogSheet dailyLog={dayLog} /> {/* Use the new component */}
+                  <EldLogSheet dailyLog={dayLog} />
                 </div>
               ))
             ) : (
