@@ -75,7 +75,7 @@ function App() {
         dropoff_location: '',
         current_cycle_used_hrs: '',
       });
-
+      
       fetchTrips();
       setSelectedTrip(response.data);
     } catch (error) {
@@ -86,7 +86,7 @@ function App() {
 
   const fetchTrips = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/trips/`);
+      const response = await axios.get(`${API_BASE_URL}/api/trips/`); // Removed dataToSend
       setTrips(response.data);
     } catch (error) {
       console.error('Error fetching trips:', error);
@@ -95,7 +95,7 @@ function App() {
 
   const handleTripSelect = async (tripId) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/trips/${tripId}/`);
+      const response = await axios.get(`${API_BASE_URL}/api/trips/${tripId}/`); // Removed dataToSend
       setSelectedTrip(response.data);
       setMessage(`Viewing Trip ID: ${tripId}`);
     } catch (error) {
@@ -108,7 +108,7 @@ function App() {
     fetchTrips();
   }, []);
 
-  let mapCenter = [39.8283, -98.5795];
+  let mapCenter = [39.8283, -98.5795]; 
   let polylinePositions = [];
   let pickupCoords = null;
   let dropoffCoords = null;
@@ -127,7 +127,7 @@ function App() {
     <div className="App">
       <main>
         <h1>George herman moshi Trucking Trip Planner</h1>
-
+        
         <div className="content-wrapper">
           <div className="left-panel">
             <h2>Enter Trip Details</h2>
@@ -190,25 +190,25 @@ function App() {
           <div className="right-panel">
             <h4>Route Map</h4>
             {selectedTrip && selectedTrip.route_geojson && selectedTrip.route_geojson.coordinates && polylinePositions.length > 1 ? (
-              <MapContainer
-                key={selectedTrip.id}
-                center={mapCenter}
-                zoom={5}
-                scrollWheelZoom={true}
-                style={{ height: '400px', width: '100%', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
-              >
-                <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <MapViewUpdater polylinePositions={polylinePositions} />
-
-                <Polyline positions={polylinePositions} color="blue" weight={5} />
-                {pickupCoords && <Marker position={pickupCoords} icon={customIcon} />}
-                {dropoffCoords && <Marker position={dropoffCoords} icon={customIcon} />}
-              </MapContainer>
+                <MapContainer 
+                    key={selectedTrip.id}
+                    center={mapCenter}
+                    zoom={5}
+                    scrollWheelZoom={true}
+                    style={{ height: '400px', width: '100%', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+                >
+                    <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <MapViewUpdater polylinePositions={polylinePositions} />
+                    
+                    <Polyline positions={polylinePositions} color="blue" weight={5} />
+                    {pickupCoords && <Marker position={pickupCoords} icon={customIcon} />}
+                    {dropoffCoords && <Marker position={dropoffCoords} icon={customIcon} />}
+                </MapContainer>
             ) : (
-              <p>Submit a trip or select an existing trip to view its route map.</p>
+                <p>Submit a trip or select an existing trip to view its route map.</p>
             )}
           </div>
         </div>
@@ -221,10 +221,10 @@ function App() {
             {trips.map(trip => (
               <li key={trip.id}>
                 <strong>ID:</strong> {trip.id}
-                <button onClick={() => handleTripSelect(trip.id)}>View Details</button><br />
-                <strong>From:</strong> {trip.pickup_location}<br />
-                <strong>To:</strong> {trip.dropoff_location}<br />
-                <strong>Cycle Used:</strong> {trip.current_cycle_used_hrs} hrs<br />
+                <button onClick={() => handleTripSelect(trip.id)}>View Details</button><br/>
+                <strong>From:</strong> {trip.pickup_location}<br/>
+                <strong>To:</strong> {trip.dropoff_location}<br/>
+                <strong>Cycle Used:</strong> {trip.current_cycle_used_hrs} hrs<br/>
                 <small>Created: {new Date(trip.created_at).toLocaleString()}</small>
               </li>
             ))}
@@ -232,37 +232,37 @@ function App() {
         )}
 
         {selectedTrip && (
-          <div className="trip-details-view">
-            <h3>Details for Trip ID: {selectedTrip.id}</h3>
-            <p>Distance: {selectedTrip.route_distance_miles ? parseFloat(selectedTrip.route_distance_miles).toFixed(2) + ' miles' : 'N/A'}</p>
-            <p>Duration: {selectedTrip.route_duration_hours ? parseFloat(selectedTrip.route_duration_hours).toFixed(2) + ' hours' : 'N/A'}</p>
+            <div className="trip-details-view">
+                <h3>Details for Trip ID: {selectedTrip.id}</h3>
+                <p>Distance: {selectedTrip.route_distance_miles ? parseFloat(selectedTrip.route_distance_miles).toFixed(2) + ' miles' : 'N/A'}</p>
+                <p>Duration: {selectedTrip.route_duration_hours ? parseFloat(selectedTrip.route_duration_hours).toFixed(2) + ' hours' : 'N/A'}</p>
 
-            <h4>ELD Daily Logs</h4>
-            {selectedTrip.daily_logs && selectedTrip.daily_logs.length > 0 ? (
-              selectedTrip.daily_logs.map((dayLog, dayIndex) => (
-                <div key={dayIndex} className="daily-log-sheet-wrapper">
-                  <h5>Day {dayIndex + 1} ({new Date(dayLog[0].start_time).toLocaleDateString()})</h5>
-                  <EldLogSheet dailyLog={dayLog} />
-                </div>
-              ))
-            ) : (
-              <p>No ELD log data available for this trip.</p>
-            )}
+                <h4>ELD Daily Logs</h4>
+                {selectedTrip.daily_logs && selectedTrip.daily_logs.length > 0 ? (
+                    selectedTrip.daily_logs.map((dayLog, dayIndex) => (
+                        <div key={dayIndex} className="daily-log-sheet-wrapper">
+                            <h5>Day {dayIndex + 1} ({new Date(dayLog[0].start_time).toLocaleDateString()})</h5>
+                            <EldLogSheet dailyLog={dayLog} />
+                        </div>
+                    ))
+                ) : (
+                    <p>No ELD log data available for this trip.</p>
+                )}
 
-            <h4>Planned Stops</h4>
-            {selectedTrip.stops && selectedTrip.stops.length > 0 ? (
-              <ul className="stops-list">
-                {selectedTrip.stops.map((stop, index) => (
-                  <li key={index}>
-                    <strong>{stop.type}:</strong> {new Date(stop.time).toLocaleString()} - Duration: {stop.duration_hours ? parseFloat(stop.duration_hours).toFixed(2) + ' hrs' : (parseFloat(stop.duration_minutes) / 60.0).toFixed(2) + ' hrs'} {stop.description && `(${stop.description})`}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No planned stops.</p>
-            )}
+                <h4>Planned Stops</h4>
+                {selectedTrip.stops && selectedTrip.stops.length > 0 ? (
+                    <ul className="stops-list">
+                        {selectedTrip.stops.map((stop, index) => (
+                            <li key={index}>
+                                <strong>{stop.type}:</strong> {new Date(stop.time).toLocaleString()} - Duration: {stop.duration_hours ? parseFloat(stop.duration_hours).toFixed(2) + ' hrs' : (parseFloat(stop.duration_minutes) / 60.0).toFixed(2) + ' hrs'} {stop.description && `(${stop.description})`}
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>No planned stops.</p>
+                )}
 
-          </div>
+            </div>
         )}
       </main>
     </div>
