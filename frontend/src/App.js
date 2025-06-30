@@ -87,9 +87,10 @@ function App() {
   const fetchTrips = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/api/trips/`);
-      setTrips(response.data);
+      setTrips(Array.isArray(response.data) ? response.data : []); 
     } catch (error) {
       console.error('Error fetching trips:', error);
+      setTrips([]);
     }
   };
 
@@ -126,7 +127,7 @@ function App() {
   return (
     <div className="App">
       <main>
-        <h1>George Herman Moshi - Trucking Trip Planner</h1>
+        <h1>George herman moshi Trucking Trip Planner</h1>
         
         <div className="content-wrapper">
           <div className="left-panel">
@@ -214,7 +215,8 @@ function App() {
         </div>
 
         <h2>Existing Trips</h2>
-        {!Array.isArray(trips) || trips.length === 0 ? (
+        {/* Explicitly ensure trips is an array before mapping */}
+        {trips && Array.isArray(trips) && trips.length === 0 ? (
           <p>No trips recorded yet. Submit a new trip to see it here!</p>
         ) : (
           <ul className="trip-list">
@@ -240,10 +242,18 @@ function App() {
                 <h4>ELD Daily Logs</h4>
                 {selectedTrip.daily_logs && selectedTrip.daily_logs.length > 0 ? (
                     selectedTrip.daily_logs.map((dayLog, dayIndex) => (
-                        <div key={dayIndex} className="daily-log-sheet-wrapper">
-                            <h5>Day {dayIndex + 1} ({new Date(dayLog[0].start_time).toLocaleDateString()})</h5>
-                            <EldLogSheet dailyLog={dayLog} />
-                        </div>
+                        // Add check for dayLog[0] before accessing its properties
+                        dayLog.length > 0 ? ( 
+                            <div key={dayIndex} className="daily-log-sheet-wrapper">
+                                <h5>Day {dayIndex + 1} ({new Date(dayLog[0].start_time).toLocaleDateString()})</h5>
+                                <EldLogSheet dailyLog={dayLog} />
+                            </div>
+                        ) : (
+                            <div key={dayIndex} className="daily-log-sheet-wrapper">
+                                <h5>Day {dayIndex + 1} (No entries)</h5>
+                                <p>No log entries for this day.</p>
+                            </div>
+                        )
                     ))
                 ) : (
                     <p>No ELD log data available for this trip.</p>
