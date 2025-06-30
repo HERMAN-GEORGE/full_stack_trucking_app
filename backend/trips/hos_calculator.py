@@ -53,20 +53,17 @@ class HOSCalculator:
         if start_dt >= end_dt:
             return
 
-        # Ensure there's always a current day's log list
+      
         if not self.daily_logs:
             self.daily_logs.append([])
         
-        # Ensure continuity: add implicit OFF-DUTY if there's a gap from last activity
-        # Only add if there's a previous activity to compare against AND the current day log is not empty
+      
         if self.daily_logs[-1] and self.last_activity_end_time < start_dt:
             gap_duration = (start_dt - self.last_activity_end_time).total_seconds() / 3600.0
             if gap_duration > 0.001:
                 self._add_log_entry_internal(self.last_activity_end_time, start_dt, STATUS_OFF_DUTY, f'Off-duty (implicit gap: {gap_duration:.2f} hrs)')
 
-        # Check for new calendar day and create new log sheet if needed
-        # This condition needs to be robust: check if daily_logs[-1] is not empty
-        # and if the last entry's date is actually different from the current end_dt's date
+  
         if self.daily_logs[-1] and end_dt.date() > datetime.fromisoformat(self.daily_logs[-1][-1]['end_time']).date():
             
             last_entry_end_on_previous_day = datetime.fromisoformat(self.daily_logs[-1][-1]['end_time'])
@@ -75,20 +72,18 @@ class HOSCalculator:
             if last_entry_end_on_previous_day < midnight_next_day:
                 self._add_log_entry_internal(last_entry_end_on_previous_day, midnight_next_day, STATUS_OFF_DUTY, 'Off-duty at end of day (implicit boundary)')
             
-            self.daily_logs.append([]) # Start a new list for the new day
-            # Reset daily clocks for the new day
+            self.daily_logs.append([]) 
+        
             self.current_day_driving_hours = 0.0
             self.current_day_on_duty_hours = 0.0
             self.driving_hours_since_last_break = 0.0
             self.last_break_taken_time = None
-            self.last_activity_end_time = self.current_time # Reset last activity time for new day
+            self.last_activity_end_time = self.current_time 
 
-        # Finally, add the actual log entry
-        # Ensure there's always at least one day log list before appending
-        if not self.daily_logs: # This check should ideally not be hit after __init__ and previous logic
+        if not self.daily_logs: 
             self.daily_logs.append([])
-        elif not self.daily_logs[-1]: # If current day log is empty (e.g. after a new day append)
-             self.daily_logs.append([]) # Create a new sublist if it's somehow empty
+        elif not self.daily_logs[-1]: 
+             self.daily_logs.append([]) 
 
         self._add_log_entry_internal(start_dt, end_dt, status, description)
 
@@ -108,9 +103,7 @@ class HOSCalculator:
             self.current_day_on_duty_hours = 0.0
             self.driving_hours_since_last_break = 0.0
             self.last_break_taken_time = None
-            
-            # Ensure a new log sheet starts after a full reset
-            # Only append a new list if the current last one has entries
+       
             if self.daily_logs and self.daily_logs[-1]:
                 self.daily_logs.append([])
             self.last_activity_end_time = self.current_time
